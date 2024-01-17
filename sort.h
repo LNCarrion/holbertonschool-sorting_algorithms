@@ -31,3 +31,4 @@ void quick_sort_helper(int *array, int lo, int hi, size_t size);
 int partition(int *array, int lo, int hi, size_t size);
 
 #endif /* SORT_H */
+
