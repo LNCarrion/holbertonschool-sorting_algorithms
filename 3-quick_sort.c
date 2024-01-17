@@ -1,69 +1,87 @@
 #include "sort.h"
 
+
 /**
- * quick_sort - sorts an array of integers in ascending order
- * @array: array to be sorted
- * @size: size of the array
+ * swap - Swaps two values
+ * @a: First value to swap
+ * @b: Second value to swap
+ *
+ * Return: void
+ */
+void swap(int *a, int *b)
+{
+	int temp_val = *a;
+	*a = *b;
+	*b = temp_val;
+}
+
+
+/**
+ * partition - Swap values of a partition
+ * @array: Array to make the partition
+ * @size: Size of the array
+ * @low: First value of the array
+ * @high: Last value of the array
+ *
+ * Return: The pivot
+ */
+int partition(int *array, size_t size, int low, int high)
+{
+	int i, pivot = array[high], greater_val = low - 1;
+
+	for (i = low; i < high; i++)
+	{
+		if (array[i] <= pivot)
+		{
+			greater_val++;
+			swap(&array[greater_val], &array[i]);
+
+			if (greater_val != i)
+				print_array(array, size);
+		}
+	}
+
+	swap(&array[greater_val + 1], &array[high]);
+	if (greater_val + 1 != high)
+		print_array(array, size);
+
+	return (greater_val + 1);
+}
+
+
+/**
+ * quick_sort_helper - Apply the quick sort algorithm
+ * @array: Array to sort
+ * @size: Size of the array
+ * @low: First value
+ * @high: Last value
+ *
+ * Return: void
+ */
+void quick_sort_helper(int *array, size_t size, int low, int high)
+{
+	int pivot;
+
+	if (low < high)
+	{
+		pivot = partition(array, size, low, high);
+
+		quick_sort_helper(array, size, low, pivot - 1);
+
+		quick_sort_helper(array, size, pivot + 1, high);
+	}
+}
+
+
+/**
+ * quick_sort - Sorts an array of integers in ascending order
+ * using the QuickSort algorithm
+ * @array: Array to sort
+ * @size: Size of the array
+ *
  * Return: void
  */
 void quick_sort(int *array, size_t size)
 {
-    if (array == NULL || size < 2)
-        return;
-    quick_sort_helper(array, 0, size - 1, size);
-}
-
-/**
- * quick_sort_helper - sorts an array of integers in ascending order
- * @array: array to be sorted
- * @lo: lowest index of the array
- * @hi: highest index of the array
- * @size: size of the array
- * Return: void
- */
-
-void quick_sort_helper(int *array, int lo, int hi, size_t size)
-{
-    int p;
-
-    if (lo < hi)
-    {
-        p = partition(array, lo, hi, size);
-        quick_sort_helper(array, lo, p - 1, size);
-        quick_sort_helper(array, p + 1, hi, size);
-    }
-}
-
-/**
- * partition - sorts an array of integers in ascending order
- * @array: array to be sorted
- * @lo: lowest index of the array
- * @hi: highest index of the array
- * @size: size of the array
- * Return: void
- */
-
-int partition(int *array, int lo, int hi, size_t size)
-{
-    int pivot = array[hi];
-    int i = lo - 1, j, temp;
-
-    for (j = lo; j <= hi - 1; j++)
-    {
-        if (array[j] <= pivot)
-        {
-            i++;
-            temp = array[i];
-            array[i] = array[j];
-            array[j] = temp;
-            if (i != j)
-                print_array(array, size);
-        }
-    }
-    temp = array[i + 1];
-    array[i + 1] = array[hi];
-    array[hi] = temp;
-    if (i + 1 != hi)
-        print_array(array, size);
-    return (i + 1);
+	quick_sort_helper(array, size, 0, size - 1);
 }
